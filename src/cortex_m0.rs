@@ -50,24 +50,46 @@ unsafe fn before_main() {
 /// Demonstrates `unsafe` access to perihpheral registers.
 /// The demo turns on LED1 (port 12, pin 2) by default and turns it off as
 /// long as SW1 (port 7, pin 0) is kept pressed.
+
+// fn get_value(loc: usize) -> i32 {
+//     let copy_var: i32;
+//     unsafe {
+//         let reg_value: i32 = *(loc as *const i32);
+//         copy_var = reg_value;
+//     }
+//     copy_var
+// }
+
 #[cortex_m_rt::entry]
 fn main() -> ! {
     _ = hprintln!("! CM0: Entering main()...");
+    let peripherals = pac::Peripherals::take().unwrap();
 
-    unsafe {
-        let gpio = &*pac::GPIO::PTR;
+ //   let reg = pac::Peripherals::take().unwrap().CANFD0.ch0.m_ttcan.cccr.read().bits();
+
+    let can_ch0 = &peripherals.CANFD0.ch0;
+    let mut reg = can_ch0.m_ttcan.cccr.read().bits();
+    _ = hprintln!("Register value is {}", reg);
+
+    can_ch0.m_ttcan.cccr.write(|w| w.cce().set_bit());
+    reg = can_ch0.m_ttcan.cccr.read().bits();
+    _ = hprintln!("Register value is {}", reg);
+
+    loop { }
+//     unsafe {
+//         let gpio = &*pac::GPIO::PTR;
                 
-        config_gpio(gpio);
+//         config_gpio(gpio);
 
-        loop {
-            if (*gpio).prt7.in_.read().in0().bit_is_clear() {
-                (*gpio).prt12.out_clr.write(|w| w.out2().set_bit());
-            }
-            else {
-                (*gpio).prt12.out_set.write(|w| w.out2().set_bit());
-            }
-        }
-	}
+//         loop {
+//             if (*gpio).prt7.in_.read().in0().bit_is_clear() {
+//                 (*gpio).prt12.out_clr.write(|w| w.out2().set_bit());
+//             }
+//             else {
+//                 (*gpio).prt12.out_set.write(|w| w.out2().set_bit());
+//             }
+//         }
+// 	}
 }
 
 /// Set-up the relevant GPIO port/pins for LED4 and SW1
