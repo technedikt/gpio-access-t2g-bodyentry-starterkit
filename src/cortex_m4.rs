@@ -20,6 +20,10 @@ use cortex_m_semihosting::hprintln;
 use cyt2b7 as pac;
 use pac::gpio as GPIO;
 
+use traveo_rusty_can::{
+    configure_can
+};
+
 /// Executes before the main function and can be used for HW initialization
 #[cortex_m_rt::pre_init]
 unsafe fn before_main() {
@@ -44,6 +48,9 @@ fn main() -> ! {
     let gpio = config_gpio();
 
     let mut delay = Delay::new(syst, get_core_frequency());
+
+    _ = hprintln!("! Configuring CAN...");
+    _ = configure_can();
 
     loop {
         // Invert GPIO state once every 250ms

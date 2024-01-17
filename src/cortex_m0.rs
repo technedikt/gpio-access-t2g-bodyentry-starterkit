@@ -60,6 +60,7 @@ fn main() -> ! {
         config_gpio(gpio);
 
         loop {
+
             if (*gpio).prt7.in_.read().in0().bit_is_clear() {
                 (*gpio).prt12.out_clr.write(|w| w.out2().set_bit());
             }

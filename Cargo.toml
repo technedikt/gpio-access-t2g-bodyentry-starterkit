@@ -9,6 +9,7 @@ cortex-m = { version = "0.7.5", features = ["critical-section-single-core"]}
 cortex-m-semihosting = { version = "0.3.1" }
 panic-halt = "0.2.0"
 cortex-m-rt = "0.7.0"
+traveo-rusty-can = { path = "C:\\Users\\Lab User\\Documents\\traveo-rusty-can" }
 
 [[bin]]
 name = "main"

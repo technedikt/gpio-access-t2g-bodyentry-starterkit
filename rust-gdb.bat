@@ -1,7 +1,7 @@
 @echo off
 SET PYTHONPATH=%PYTHONHOME%\Lib
 
-SET RUST_GDB=arm-none-eabi-gdb-py.exe
+SET RUST_GDB=arm-none-eabi-gdb.exe
 
 for /f %%s in ('rustc --print=sysroot') do SET RUSTC_SYSROOT=%%s
 
