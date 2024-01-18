@@ -14,7 +14,7 @@
 // IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE
 // ---
 
-use cortex_m::delay::Delay;
+// use cortex_m::delay::Delay;
 use cortex_m_semihosting::hprintln;
 
 use cyt2b7 as pac;
@@ -37,25 +37,32 @@ unsafe fn before_main() {
 /// The demo periodically toggles LED4 (port 19, pin 0)
 #[cortex_m_rt::entry]
 fn main() -> ! {
-    use crate::get_core_frequency;
+    // use crate::get_core_frequency;
 
     _ = hprintln!("! CM4: Entering main()...");
 
     // Core peripheral registers
-    let cp = cortex_m::Peripherals::take().unwrap();
-    let syst = cp.SYST;
+    // let cp = cortex_m::Peripherals::take().unwrap();
+    // let syst = cp.SYST;
 
-    let gpio = config_gpio();
+    // let gpio = config_gpio();
 
-    let mut delay = Delay::new(syst, get_core_frequency());
+    // let mut delay = Delay::new(syst, get_core_frequency());
 
     _ = hprintln!("! Configuring CAN...");
-    _ = configure_can();
+    if let Some(peripherals) = pac::Peripherals::take() {
+        _ = hprintln!("! Bene you fixed the problem :)");
+        _ = configure_can(&peripherals);
+    } else {
+        _ = hprintln!("! Bene this is a disaster :(")
+    }
+    
 
     loop {
         // Invert GPIO state once every 250ms
-        gpio.prt19.out_inv.write(|w| w.out0().bit(true));
-        delay.delay_ms(250);
+        // gpio.prt19.out_inv.write(|w| w.out0().bit(true));
+        // delay.delay_ms(250);
+
     }
 }
 
